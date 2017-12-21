@@ -5,14 +5,15 @@
 function localizer
 global localizerPrefix rawPrefix
 dataLocations = { ...
-    'control', ...
+    'Control', ...
+    'Esca', ...
     };
 
 localizerPrefix = 'localized';
 rawPrefix = 'raw';
 
 for i=1:length(dataLocations)
-    iterateLocation( cell2mat(dataLocations(i)) )
+    iterateLocation( cell2mat(fullfile(cd,rawPrefix,dataLocations(i))) )
 end
 
 function iterateLocation( location )
@@ -26,23 +27,28 @@ list = [ dir( '*.jpg' ); dir( '*.JPG' ) ];
 % Go back to root of this project
 cd( PREVDIR );
 
+
 % For each image ...
 for i=1:length(list)
     cd( location );
     % Get the file name
     fileName = list(i).name;
     % Use fullfile to contruct save directory name
-    saveDir = fullfile( PREVDIR, location, localizerPrefix );
+    saveDir = fullfile( location, localizerPrefix );
     if ~exist( saveDir )
         mkdir( saveDir )
+    else
+        cd( saveDir );
+        delete( '*.*' );
+        cd( location );
     end
     
     % Load the file
     im = imread( fileName );
     [ resultAugmented, n_ ] = augmentData( im );
-    for j=1:n_
-        saveFile = fullfile( saveDir, 'a', num2str(j), '-', lower(fileName) );
-        imwrite( resultAugmented(i).data, saveFile );
+    for ii=1:n_
+        saveFile = fullfile( saveDir, [ 'a', num2str(ii), '-', lower(fileName) ] );
+        imwrite( resultAugmented(ii).data, saveFile );
         display( [ 'Writing ' saveFile ] );
     end
     
@@ -54,14 +60,18 @@ end
 function [ res, NUM_AUGS ] = augmentData( im )
 NUM_AUGS = 10;
 FLIP_RATE = 0.5;
-res(1).data = [];
 
 for i=1:NUM_AUGS
+    res(i).data = [];
+end
+
+parfor i=1:NUM_AUGS
     res(i).data = localizeImage( im );
     if rand() > FLIP_RATE
         res(i).data = fliplr( res(i).data );
     end
     res(i).data = imrotate( res(i).data, rand()*360 );
+    res(i).data = imresize( res(i).data, [NaN 256] );
 end
 
 function res = localizeImage( im )
