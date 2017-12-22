@@ -5,48 +5,49 @@
 function localizer
 global localizerPrefix rawPrefix
 dataLocations = { ...
-    'Control', ...
-    'Esca', ...
+    'Other', ...
     };
 
 localizerPrefix = 'localized';
 rawPrefix = 'raw';
 
 for i=1:length(dataLocations)
-    iterateLocation( cell2mat(fullfile(cd,rawPrefix,dataLocations(i))) )
+    iterateLocation( cell2mat(fullfile(dataLocations(i))) );
 end
 
 function iterateLocation( location )
 global localizerPrefix rawPrefix
+rawDirectory = fullfile( rawPrefix, location );
+localizedDirectory = fullfile( localizerPrefix, location );
 PREVDIR = cd;
 
 % Change to directory with images
-cd( location );
+cd( rawDirectory );
 % Get the images, note that dir produces a tall vector
 list = [ dir( '*.jpg' ); dir( '*.JPG' ) ];
 % Go back to root of this project
 cd( PREVDIR );
 
+% Use fullfile to contruct save directory name
+saveDir = fullfile( PREVDIR, localizedDirectory );
+if ~exist( saveDir )
+    mkdir( saveDir )
+else
+    cd( saveDir );
+    delete( '*.*' );
+    cd( PREVDIR );
+end
 
 % For each image ...
 for i=1:length(list)
-    cd( location );
+    cd( rawDirectory );
     % Get the file name
     fileName = list(i).name;
-    % Use fullfile to contruct save directory name
-    saveDir = fullfile( location, localizerPrefix );
-    if ~exist( saveDir )
-        mkdir( saveDir )
-    else
-        cd( saveDir );
-        delete( '*.*' );
-        cd( location );
-    end
     
     % Load the file
     im = imread( fileName );
     [ resultAugmented, n_ ] = augmentData( im );
-    for ii=1:n_
+    parfor ii=1:n_
         saveFile = fullfile( saveDir, [ 'a', num2str(ii), '-', lower(fileName) ] );
         imwrite( resultAugmented(ii).data, saveFile );
         display( [ 'Writing ' saveFile ] );
@@ -58,7 +59,7 @@ end
 % The following function should return a struct of images that have
 % been randomly flipped and rotated for data augmentation purposes
 function [ res, NUM_AUGS ] = augmentData( im )
-NUM_AUGS = 10;
+NUM_AUGS = 12;
 FLIP_RATE = 0.5;
 
 for i=1:NUM_AUGS
@@ -70,7 +71,7 @@ parfor i=1:NUM_AUGS
     if rand() > FLIP_RATE
         res(i).data = fliplr( res(i).data );
     end
-    res(i).data = imrotate( res(i).data, rand()*360 );
+    res(i).data = imrotate( res(i).data, rand()*360, 'bicubic', 'crop' );
     res(i).data = imresize( res(i).data, [NaN 256] );
 end
 
@@ -84,7 +85,7 @@ catch e
     error( 'Error attempting to segment leaf boundary!' );
 end
 
-try 
+try
     %% Part 1: Determine crop conditions
     vertBound = logical(max(leafMask, [], 2 ));
     horzBound = logical(max(leafMask, [], 1 ));
