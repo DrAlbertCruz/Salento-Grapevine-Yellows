@@ -73,8 +73,11 @@ for i=1:NUM_AUGS
         res(i).data = fliplr( res(i).data );
     end
 	% Rotate the leaf
-	rand_ = rand()*30 - 15
+	rand_ = rand()*30 - 15;
+	randx = rand()*30 - 15;
+	randy = rand()*30 - 15;
     res(i).data = imrotate( res(i).data, rand_, 'bicubic', 'crop' );
+    res(i).data = imtranslate( res(i).data, [randx,randy], 'FillValues', 0) );
     res(i).data = imresize( res(i).data, [NaN 256] );
 end
 
