@@ -1,14 +1,13 @@
 %% localizer.m
-%   The following code localizes the images by segmenting them and
-%   centering them on the centroid.
+%   Use MATLAB to roughly segment and localize the leaf images.
 
 function localizer
 global localizerPrefix rawPrefix
 dataLocations = { ...
-    'Grapevine_yellow', ...
+    'Black_rot','Control','Esca','Grapevine_yellow','Leaf_blight','Other', ...
     };
 
-localizerPrefix = 'localized';
+localizerPrefix = 'localized2';
 rawPrefix = 'raw';
 
 for i=1:length(dataLocations)
@@ -28,7 +27,7 @@ list = [ dir( '*.jpg' ); dir( '*.JPG' ) ];
 % Go back to root of this project
 cd( PREVDIR );
 
-% Use fullfile to contruct save directory name
+% Use fullfile to construct save directory name
 saveDir = fullfile( PREVDIR, localizedDirectory );
 if ~exist( saveDir )
     mkdir( saveDir )
@@ -47,7 +46,7 @@ for i=1:length(list)
     % Load the file
     im = imread( fileName );
     [ resultAugmented, n_ ] = augmentData( im );
-    parfor ii=1:n_
+    for ii=1:n_
         saveFile = fullfile( saveDir, [ 'a', num2str(ii), '-', lower(fileName) ] );
         imwrite( resultAugmented(ii).data, saveFile );
         display( [ 'Writing ' saveFile ] );
@@ -59,19 +58,23 @@ end
 % The following function should return a struct of images that have
 % been randomly flipped and rotated for data augmentation purposes
 function [ res, NUM_AUGS ] = augmentData( im )
-NUM_AUGS = 12;
+NUM_AUGS = 10;
 FLIP_RATE = 0.5;
 
 for i=1:NUM_AUGS
     res(i).data = [];
 end
 
-parfor i=1:NUM_AUGS
+for i=1:NUM_AUGS
+	% Segment the leaf
     res(i).data = localizeImage( im );
+	% Flip the leaf
     if rand() > FLIP_RATE
         res(i).data = fliplr( res(i).data );
     end
-    res(i).data = imrotate( res(i).data, rand()*360, 'bicubic', 'crop' );
+	% Rotate the leaf
+	rand_ = rand()*30 - 15
+    res(i).data = imrotate( res(i).data, rand_, 'bicubic', 'crop' );
     res(i).data = imresize( res(i).data, [NaN 256] );
 end
 
