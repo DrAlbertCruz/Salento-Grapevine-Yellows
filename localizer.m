@@ -7,7 +7,7 @@ dataLocations = { ...
     'Black_rot','Control','Esca','Grapevine_yellow','Leaf_blight','Other', ...
     };
 
-localizerPrefix = 'localized2';
+localizerPrefix = 'localized';
 rawPrefix = 'raw';
 
 for i=1:length(dataLocations)
@@ -46,7 +46,7 @@ for i=1:length(list)
     % Load the file
     im = imread( fileName );
     [ resultAugmented, n_ ] = augmentData( im );
-    for ii=1:n_
+    parfor ii=1:n_
         saveFile = fullfile( saveDir, [ 'a', num2str(ii), '-', lower(fileName) ] );
         imwrite( resultAugmented(ii).data, saveFile );
         display( [ 'Writing ' saveFile ] );
@@ -58,26 +58,28 @@ end
 % The following function should return a struct of images that have
 % been randomly flipped and rotated for data augmentation purposes
 function [ res, NUM_AUGS ] = augmentData( im )
-NUM_AUGS = 10;
+NUM_AUGS = 4;
 FLIP_RATE = 0.5;
 
 for i=1:NUM_AUGS
     res(i).data = [];
 end
 
-for i=1:NUM_AUGS
+parfor i=1:NUM_AUGS
 	% Segment the leaf
-    res(i).data = localizeImage( im );
+    % 7/3 Do not segment the leaf boundary, just rotate it
+    % res(i).data = localizeImage( im );
+    res(i).data = im;
 	% Flip the leaf
     if rand() > FLIP_RATE
         res(i).data = fliplr( res(i).data );
     end
 	% Rotate the leaf
 	rand_ = rand()*30 - 15;
-	randx = rand()*30 - 15;
-	randy = rand()*30 - 15;
+	randx = rand()*20 - 10;
+	randy = rand()*20 - 10;
     res(i).data = imrotate( res(i).data, rand_, 'bicubic', 'crop' );
-    res(i).data = imtranslate( res(i).data, [randx,randy], 'FillValues', 0) );
+    res(i).data = imtranslate( res(i).data, [randx,randy], 'FillValues', 0);
     res(i).data = imresize( res(i).data, [NaN 256] );
 end
 
