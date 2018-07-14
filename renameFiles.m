@@ -1,6 +1,6 @@
 % For all JPEG images in a directory, rename them to their MD5 checksum.
 % This will also remove duplicate images.
-FILE_LOCATION = 'D:\Salento-Grapevine-Yellows-Dataset\localized2\Esca_captured';
+FILE_LOCATION = 'D:\Salento-Grapevine-Yellows-Dataset\localized\Other';
 WORK_DIR = 'D:\Salento-Grapevine-Yellows-Dataset';
 
 % Get list of files
