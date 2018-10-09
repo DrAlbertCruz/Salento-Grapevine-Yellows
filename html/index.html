@@ -12,14 +12,16 @@
 		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+		
+		<script src="assets/js/gy.js"></script>
+		
 	</head>
 	<body>
-
 		<!-- One -->
 			<section id="one" class="wrapper special">
 				<div class="inner">
 					<ul class="actions">
-						<li><a href="#" class="button special">Start New Trial</a></li>
+						<li><a id="newExperimentButton" href="#" class="button special">Start New Trial</a></li>
 					</ul>
 				
 					<header class="major">
@@ -59,25 +61,76 @@
 			<section id="two" class="wrapper style2 special">
 				<div class="inner narrow">
 					<header>
-						<h2>Get in touch</h2>
-					</header>
-					<form class="grid-form" method="post" action="#">
-						<div class="form-control narrow">
-							<label for="name">Name</label>
-							<input name="name" id="name" type="text">
-						</div>
-						<div class="form-control narrow">
-							<label for="email">Email</label>
-							<input name="email" id="email" type="email">
-						</div>
-						<div class="form-control">
-							<label for="message">Message</label>
-							<textarea name="message" id="message" rows="4"></textarea>
-						</div>
+						<h2>How did you do?</h2>
 						<ul class="actions">
-							<li><input value="Send Message" type="submit"></li>
+							<li><a id="refreshButton" class="button special">Refresh Results</a></li>
 						</ul>
-					</form>
+					</header>
+					<table>
+						<tr>
+							<th>True category</th>
+							<th>Black rot</th>
+							<th>Control</th>
+							<th>Esca</th>
+							<th>Grapevine yellows</th>
+							<th>Leaf blight</th>
+							<th>Other disease</th>
+						</tr>
+						<tr>
+							<td>Black rot</td>
+							<td id="c00">0</td>
+							<td id="c01">0</td>
+							<td id="c02">0</td>
+							<td id="c03">0</td>
+							<td id="c04">0</td>
+							<td id="c05">0</td>
+						</tr>
+						<tr>
+							<td>Control</td>
+							<td id="c10">0</td>
+							<td id="c11">0</td>
+							<td id="c12">0</td>
+							<td id="c13">0</td>
+							<td id="c14">0</td>
+							<td id="c15">0</td>
+						</tr>
+						<tr>
+							<td>Esca</td>
+							<td id="c20">0</td>
+							<td id="c21">0</td>
+							<td id="c22">0</td>
+							<td id="c23">0</td>
+							<td id="c24">0</td>
+							<td id="c25">0</td>
+						</tr>
+						<tr>
+							<td>Grapevine yellows</td>
+							<td id="c30">0</td>
+							<td id="c31">0</td>
+							<td id="c32">0</td>
+							<td id="c33">0</td>
+							<td id="c34">0</td>
+							<td id="c35">0</td>
+						</tr>
+						<tr>
+							<td>Leaf blight</td>
+							<td id="c40">0</td>
+							<td id="c41">0</td>
+							<td id="c42">0</td>
+							<td id="c43">0</td>
+							<td id="c44">0</td>
+							<td id="c45">0</td>
+						</tr>
+						<tr>
+							<td>Other disease</td>
+							<td id="c50">0</td>
+							<td id="c51">0</td>
+							<td id="c52">0</td>
+							<td id="c53">0</td>
+							<td id="c54">0</td>
+							<td id="c55">0</td>
+						</tr>
+					</table>
 				</div>
 			</section>
 
@@ -490,7 +543,7 @@ print 'It took ' + i + ' iterations to sort the deck.';
 		<!-- Footer -->
 			<footer id="footer">
 				<div class="copyright">
-					&copy; Untitled. Design: <a href="http://templated.co/">TEMPLATED</a>.
+					A. Cruz 2018. Design: <a href="http://templated.co/">TEMPLATED</a>.
 				</div>
 			</footer>
 
