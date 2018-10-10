@@ -9,7 +9,9 @@ imagePath = '/home/acruz/data/Salento-Grapevine-Yellows-Dataset/localized/Black_
 cd( imagePath );
 images = dir( '*.jpg' );
 
+tic
 parfor i=1:size(images,1)
     movefile( fullfile(images(i).folder, images(i).name), ...
        fullfile(images(i).folder, ['image-' num2str(i), '.jpg']) );
 end
+toc
