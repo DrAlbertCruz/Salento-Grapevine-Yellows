@@ -4,16 +4,16 @@
 
 % Assume that parpool is open
 
-for imageClass = { 'Esca', 'Grapevine_yellow', 'Leaf_blight', 'Other' }
+for imageClass = { 'GY', 'Healthy', 'Other' }
 
-   imagePath = fullfile( '/home/acruz/data/Salento-Grapevine-Yellows-Dataset/localized', ...
+   imagePath = fullfile( '/home/acruz/data/Salento-Grapevine-Yellows-Dataset/raw', ...
       cell2mat(imageClass) );
 
    cd( imagePath );
    images = dir( '*.jpg' );
 
    tic
-   parfor i=1:size(images,1)
+   for i=1:size(images,1)
       movefile( fullfile(images(i).folder, images(i).name), ...
          fullfile(images(i).folder, ['image-' num2str(i), '.jpg']) );
    end

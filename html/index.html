@@ -16,64 +16,43 @@
 		
 	</head>
 	<body>
-		<!-- One -->
+		<!-- Quiz pane -->
 			<section id="one" class="wrapper special">
 				<div class="inner">
-					<ul class="actions">
-						<li><a id="newExperimentButton" href="#" class="button special">Start New Trial</a></li>
-					</ul>
-					
-					<?php
-					$dir = 'http://localhost/Salento-Grapevine-Yellows-Dataset/localized/Black_rot';
-					$files1 = scandir($dir);
-					print_r($files)
-					?>
 				
-					<header class="major">
+					<header>
 						<h2>Consider the following image:</h2>
+						<p>Does the image have grapevine yellows?</p>
 					</header>
-					<div class="features">
-						<div class="feature">
-							<i class="fa fa-diamond"></i>
-							<h3>Etiam consequat</h3>
-							<p>Sed tempus feugiat adipiscing nisl cursus aliquam dolore.</p>
+				
+					<div class="row">
+						<div class="12u 12u$(small)">
+							<p><center>
+								<img src="" id="imagePane"/>
+							</p></center>
 						</div>
-						<div class="feature">
-							<i class="fa fa-copy"></i>
-							<h3>Sed adipiscing</h3>
-							<p>Sed tempus feugiat adipiscing nisl cursus aliquam dolore.</p>
-						</div>
-						<div class="feature">
-							<i class="fa fa-paper-plane-o"></i>
-							<h3>Feugiat nullam</h3>
-							<p>Sed tempus feugiat adipiscing nisl cursus aliquam dolore.</p>
-						</div>
-						<div class="feature">
-							<i class="fa fa-save"></i>
-							<h3>Amet imperdiet</h3>
-							<p>Sed tempus feugiat adipiscing nisl cursus aliquam dolore.</p>
-						</div>
-						<div class="feature">
-							<i class="fa fa-envelope-o"></i>
-							<h3>Tempus lorem</h3>
-							<p>Sed tempus feugiat adipiscing nisl cursus aliquam dolore.</p>
+					</div>
+					
+					<div class"row">
+						<div class="12u 12u$(small)">
+							<ul class="actions">
+								<li><a href="#" class="button alt small fit" id="blackRotButton">Yes</a></li>
+								<li><a href="#" class="button alt small fit" id="healthyButton">No</a></li>
+							</ul>
 						</div>
 					</div>
 				</div>
 			</section>
 
-		<!-- Two -->
+		<!-- Confusion matrix pane -->
 			<section id="two" class="wrapper style2 special">
 				<div class="inner narrow">
 					<header>
 						<h2>How did you do?</h2>
-						<ul class="actions">
-							<li><a id="refreshButton" class="button special">Refresh Results</a></li>
-						</ul>
 					</header>
 					<table>
 						<tr>
-							<th>True category</th>
+							<th>True population</th>
 							<th>Black rot</th>
 							<th>Control</th>
 							<th>Esca</th>
@@ -137,10 +116,18 @@
 						</tr>
 					</table>
 				</div>
+				
+				<p>The above matrix is called a confusion matrix. The rows represent the true population of the sample, and the columns represent the category you grouped the samples into. For example, under the row "Black rot" and column "Black rot", this represents the number of samples that were from the black rot population that you correctly identified as black rot. Under the row "Black rot" and column "Control", this represents the number of samples that were from the black rot population that you misclassified as a control sample. And so on.</p>
+				
+				<ul class="actions">
+					<li><a id="newExperimentButton" href="#" class="button special small fit">Start New Trial (Reset above)</a></li>
+					<li><a id="refreshButton" class="button special small fit">Refresh Results</a></li>
+				</ul>
 			</section>
+			
+			
 
 		<!-- Three -->
-		<!--
 			<section id="three" class="wrapper">
 				<div class="inner">
 
@@ -543,7 +530,6 @@ print 'It took ' + i + ' iterations to sort the deck.';
 
 				</div>
 			</section>
-		-->
 
 		<!-- Footer -->
 			<footer id="footer">

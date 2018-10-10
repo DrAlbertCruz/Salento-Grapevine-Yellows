@@ -15,43 +15,21 @@ window.onload = function() {
 }
 
 var imageJob = function() {
-	this.imagePath = "../localized/";				// Path to images
+	this.imagePath = "../raw/";				// Path to images
 	this.numClasses = 6;							// Repeated, probably need to address this
-	// Randomly select one of the six labels
-	this.label = Math.floor( Math.random() * this.numClasses );		
-	// Get list of files
-    /*$.get('http://localhost/Salento-Grapevine-Yellows-Dataset/localized/Black_rot', (data) => 
-    {
-        console.log(data);
-        let listing = parseDirectoryListing(data);
-        $('body').append(JSON.stringify(listing));
-    });
-
-    function parseDirectoryListing(text) 
-    {
-        let docs = text
-                     .match(/href="([\w]+)/g) // pull out the hrefs
-                     .map((x) => x.replace('href="', '')); // clean up
-        console.log(docs);
-        return docs;
-    };
-	
-	
+	// 1/3 a prior chance of pulling a GY yellows
+	this.label = Math.floor( Math.random() * 3 );
 	switch (this.label) {
 		case 0:
-			this.files = fs.readdirSync( this.imagePath + "Black_rot" ); break;
+			this.imagePath = this.imagePath + "GY/"; break;
 		case 1:
-			this.files = fs.readdirSync( this.imagePath + "Control" ); break;
+			this.imagePath = this.imagePath + "Other/"; break;
 		case 2:
-			this.files = fs.readdirSync( this.imagePath + "Esca" ); break;
-		case 3:
-			this.files = fs.readdirSync( this.imagePath + "Grapevine_yellow" ); break;
-		case 4:
-			this.files = fs.readdirSync( this.imagePath + "Leaf_blight" ); break;
-		case 5:
-			this.files = fs.readdirSync( this.imagePath + "Other" ); break;
-	}*/
-	
+			this.imagePath = this.imagePath + "Healthy/"; break;
+	}
+	this.imagePath = this.imagePath + Math.floor( Math.random() * 165 + 1 ) + '.jpg';
+	document.getElementById("imagePane").setAttribute("src",this.imagePath);
+	document.getElementById("imagePane").setAttribute("width","300px");
 }
 
 var experiment = function() {
