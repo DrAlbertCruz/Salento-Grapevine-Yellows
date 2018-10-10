@@ -6,7 +6,7 @@
 
 for imageClass = { 'GY', 'Healthy', 'Other' }
 
-   imagePath = fullfile( '/home/acruz/data/Salento-Grapevine-Yellows-Dataset/raw', ...
+   imagePath = fullfile( 'C:\wamp64\www\Salento-Grapevine-Yellows-Dataset\raw', ...
       cell2mat(imageClass) );
 
    cd( imagePath );
