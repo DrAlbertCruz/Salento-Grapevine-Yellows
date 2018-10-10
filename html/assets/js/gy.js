@@ -15,12 +15,28 @@ window.onload = function() {
 }
 
 var imageJob = function() {
-	var fs = require('fs');							// Require fs
 	this.imagePath = "../localized/";				// Path to images
 	this.numClasses = 6;							// Repeated, probably need to address this
 	// Randomly select one of the six labels
 	this.label = Math.floor( Math.random() * this.numClasses );		
-	// Switch based on random label
+	// Get list of files
+    /*$.get('http://localhost/Salento-Grapevine-Yellows-Dataset/localized/Black_rot', (data) => 
+    {
+        console.log(data);
+        let listing = parseDirectoryListing(data);
+        $('body').append(JSON.stringify(listing));
+    });
+
+    function parseDirectoryListing(text) 
+    {
+        let docs = text
+                     .match(/href="([\w]+)/g) // pull out the hrefs
+                     .map((x) => x.replace('href="', '')); // clean up
+        console.log(docs);
+        return docs;
+    };
+	
+	
 	switch (this.label) {
 		case 0:
 			this.files = fs.readdirSync( this.imagePath + "Black_rot" ); break;
@@ -34,7 +50,7 @@ var imageJob = function() {
 			this.files = fs.readdirSync( this.imagePath + "Leaf_blight" ); break;
 		case 5:
 			this.files = fs.readdirSync( this.imagePath + "Other" ); break;
-	}
+	}*/
 	
 }
 

@@ -13,7 +13,6 @@
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
 		
-		<script src="assets/js/gy.js"></script>
 		
 	</head>
 	<body>
@@ -23,6 +22,12 @@
 					<ul class="actions">
 						<li><a id="newExperimentButton" href="#" class="button special">Start New Trial</a></li>
 					</ul>
+					
+					<?php
+					$dir = 'http://localhost/Salento-Grapevine-Yellows-Dataset/localized/Black_rot';
+					$files1 = scandir($dir);
+					print_r($files)
+					?>
 				
 					<header class="major">
 						<h2>Consider the following image:</h2>
@@ -553,6 +558,7 @@ print 'It took ' + i + ' iterations to sort the deck.';
 			<script src="assets/js/util.js"></script>
 			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
 			<script src="assets/js/main.js"></script>
+			<script src="assets/js/gy.js"></script>
 
 	</body>
 </html>
