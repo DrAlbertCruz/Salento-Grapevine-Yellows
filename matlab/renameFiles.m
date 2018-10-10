@@ -2,16 +2,20 @@
 % so this MATLAB script will rename all the files in a given directory to a
 % number
 
-parpool local
+% Assume that parpool is open
 
-imagePath = '/home/acruz/data/Salento-Grapevine-Yellows-Dataset/localized/Black_rot';
+for imageClass = { 'Esca', 'Grapevine_yellow', 'Leaf_blight', 'Other' }
 
-cd( imagePath );
-images = dir( '*.jpg' );
+   imagePath = fullfile( '/home/acruz/data/Salento-Grapevine-Yellows-Dataset/localized', ...
+      cell2mat(imageClass) );
 
-tic
-parfor i=1:size(images,1)
-    movefile( fullfile(images(i).folder, images(i).name), ...
-       fullfile(images(i).folder, ['image-' num2str(i), '.jpg']) );
+   cd( imagePath );
+   images = dir( '*.jpg' );
+
+   tic
+   parfor i=1:size(images,1)
+      movefile( fullfile(images(i).folder, images(i).name), ...
+         fullfile(images(i).folder, ['image-' num2str(i), '.jpg']) );
+   end
+   toc
 end
-toc
