@@ -1,17 +1,14 @@
 window.onload = function() {
 	var newExperimentButton = document.getElementById("newExperimentButton");
-	var refreshButton = document.getElementById("refreshButton");
 	var yesButton = document.getElementById("yesButton");
 	var noButton = document.getElementById("noButton");
+	var submitButton = document.getElementById("submitButton");
+	var emailField = document.getElementById("emailField");
 	var currentExperiment = new experiment();
 	var currentJob = new imageJob();
 	
 	newExperimentButton.onclick = function() {
-		var currentExperiment = new experiment();
-		return false;
-	};
-	
-	refreshButton.onclick = function() {
+		currentExperiment.resetExperiment();
 		currentExperiment.display();
 		return false;
 	};
@@ -26,6 +23,19 @@ window.onload = function() {
 		// It doesn't really matter which one this is as long as its not 0
 		currentExperiment.increment( currentJob.label, 1 );	// Increment results
 		setNewImage();
+		return false;
+	};
+	
+	// Callback for when the user clicks on the 'send' button to report results via email
+	submitButton.onclick = function() {
+		var resultsString = 'Hi,%0A%0AI%20got%20the%20following%20results:%0A' 
+							+ currentExperiment.displayString()
+							+ '%0AThanks!';
+		window.open( 'mailto:'
+		             + emailField.getAttribute("value")
+					 + '?subject=GY%20detection%20results&body='
+					 + resultsString
+					 );
 		return false;
 	};
 	
@@ -81,6 +91,24 @@ var experiment = function() {
 			this.tn++;
 			this.n++;
 		}
+	};
+	
+	// Call this function to get a string of formatted results
+	this.displayString = function () {
+		return 'True%20positives:%20' + this.tp + '%0A'
+				+ 'False%20negatives:%20' + this.fn + '%0A'
+				+ 'False%20positives:%20' + this.fp + '%0A'
+				+ 'True%20negatives:%20' + this.tn + '%0A';
+	}
+	
+	// This function used to set everything to zero
+	this.resetExperiment = function() {
+		this.n = 0;				// Number of negatives
+		this.p = 0;				// Number of positives
+		this.tp = 0;			// Number of true positives
+		this.tn = 0;			// Number of true negatives
+		this.fp = 0;			// Number of false positives
+		this.fn = 0;			// Number of false negatives
 	};
 	
 	this.display = function() {
