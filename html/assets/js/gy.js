@@ -2,8 +2,9 @@ window.onload = function() {
 	var newExperimentButton = document.getElementById("newExperimentButton");
 	var yesButton = document.getElementById("yesButton");
 	var noButton = document.getElementById("noButton");
-	var submitButton = document.getElementById("submitButton");
-	var emailField = document.getElementById("emailField");
+	var submitButton = document.getElementById("submitEmail");
+	var emailField = document.getElementById("emailInput");
+	var nameField = document.getElementById("nameInput");
 	var currentExperiment = new experiment();
 	var currentJob = new imageJob();
 	
@@ -28,14 +29,23 @@ window.onload = function() {
 	
 	// Callback for when the user clicks on the 'send' button to report results via email
 	submitButton.onclick = function() {
-		var resultsString = 'Hi,%0A%0AI%20got%20the%20following%20results:%0A' 
-							+ currentExperiment.displayString()
-							+ '%0AThanks!';
-		window.open( 'mailto:'
-		             + emailField.getAttribute("value")
-					 + '?subject=GY%20detection%20results&body='
-					 + resultsString
-					 );
+		var resultsString = 'Hi,\r\n\r\nHere is a summary of your results:\r\nName: '
+			+ nameField.value + '\r\n'
+			+ currentExperiment.displayString() + '\r\n'
+			+ 'Thanks!';
+		var data = {
+		    name: nameField.value,
+		    email: emailField.value,
+		    message: resultsString
+		};
+		$.ajax({
+		    type: "POST",
+		    url: "email.php",
+		    data: data,
+		    success: function(){
+		    $('.success').fadeIn(1000);
+		    }
+		});
 		return false;
 	};
 	
@@ -44,6 +54,25 @@ window.onload = function() {
 		currentExperiment.display();	// Refresh the display
 	};
 }
+
+function spamcheck($field) {
+    $field=filter_var($field, FILTER_SANITIZE_EMAIL);
+
+    if(filter_var($field, FILTER_VALIDATE_EMAIL)) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+function sendMail($toEmail, $fromEmail, $subject, $message) {
+    $validFromEmail = spamcheck($fromEmail);
+    if($validFromEmail) {
+        mail($toEmail, $subject, $message, "From: $fromEmail");
+    }
+}
+
 
 var imageJob = function() {
 	this.imagePath = "../raw/";				// Path to images
@@ -95,10 +124,10 @@ var experiment = function() {
 	
 	// Call this function to get a string of formatted results
 	this.displayString = function () {
-		return 'True%20positives:%20' + this.tp + '%0A'
-				+ 'False%20negatives:%20' + this.fn + '%0A'
-				+ 'False%20positives:%20' + this.fp + '%0A'
-				+ 'True%20negatives:%20' + this.tn + '%0A';
+		return 'True positives: ' + this.tp + '\r\n'
+			+ 'False negatives: ' + this.fn + '\r\n'
+			+ 'False positives: ' + this.fp + '\r\n'
+			+ 'True negatives: ' + this.tn + '\r\n';
 	}
 	
 	// This function used to set everything to zero

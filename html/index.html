@@ -80,13 +80,14 @@
 						<h3>E-mail me the results</h3>
 					</header>
 					
-					<form method="post" action="#">
+					<form method="POST" id="emailForm">
 						<div class="row uniform">
 							<div class="9u 12u$(small)">
-								<input type="text" name="query" id="emailField" value="" placeholder="name@email.com" />
+								<input class="small fit" type="text" name="nameInput" id="nameInput" value="" placeholder="John Doe" />
+								<input class="small fit" type="email" name="emailInput" id="emailInput" value="" placeholder="name@email.com" />
 							</div>
 							<div class="3u$ 12u$(small)">
-								<input type="submit" value="Send" class="fit" id="submitButton"/>
+								<input type="submit" value="Send" class="fit" id="submitEmail"/>
 							</div>
 						</div>
 					</form>
