@@ -1,3 +1,7 @@
+/*** Constants ***/
+DOMAIN_PATH = 'http://sleipnir.cs.csubak.edu/~acruz/Salento-Grapevine-Yellows-Dataset/';
+IMAGE_PATH = DOMAIN_PATH + 'raw/';
+
 window.onload = function() {
 	var newExperimentButton = document.getElementById("newExperimentButton");
 	var yesButton = document.getElementById("yesButton");
@@ -5,13 +9,22 @@ window.onload = function() {
 	var submitButton = document.getElementById("submitEmail");
 	var emailField = document.getElementById("emailInput");
 	var nameField = document.getElementById("nameInput");
+	var emailOKAlert = document.getElementById("emailOK");
+	var emailBadAlert = document.getElementById("emailBad");
 	var currentExperiment = new experiment();
 	var currentJob = new imageJob();
 	
+    // Alert boxes need to disappear
+    emailOKAlert.style.display='none';
+    emailBadAlert.style.display='none';
+
 	newExperimentButton.onclick = function() {
+        // Alert boxes need to disappear
 		currentExperiment.resetExperiment();
 		currentExperiment.display();
 		setNewImage();
+        emailOKAlert.style.display='none';
+        emailBadAlert.style.display='none';
 		return false;
 	};
 	
@@ -30,6 +43,9 @@ window.onload = function() {
 	
 	// Callback for when the user clicks on the 'send' button to report results via email
 	submitButton.onclick = function() {
+        // Alert boxes need to disappear
+        emailOKAlert.style.display='none';
+        emailBadAlert.style.display='none';
 		var resultsString = 'Hi,\r\n\r\nHere is a summary of your results:\r\nName: '
 			+ nameField.value + '\r\n'
 			+ currentExperiment.displayString() + '\r\n'
@@ -43,9 +59,12 @@ window.onload = function() {
 		    type: "POST",
 		    url: "email.php",
 		    data: data,
-		    success: function(){
-		    $('.success').fadeIn(1000);
-		    }
+		    success: function() {
+                emailOKAlert.style.display='initial';
+		    },
+            error: function() {
+                emailBadAlert.style.display='initial';
+            }
 		});
 		return false;
 	};
@@ -54,6 +73,15 @@ window.onload = function() {
 		currentJob = new imageJob();	// Reset job
 		currentExperiment.display();	// Refresh the display
 	};
+}
+
+function imageExists(image_url) {
+    var http = new XMLHttpRequest();
+
+    http.open('HEAD', image_url, true);
+    http.send();
+
+    return http.status != 404;
 }
 
 function spamcheck($field) {
@@ -74,22 +102,36 @@ function sendMail($toEmail, $fromEmail, $subject, $message) {
     }
 }
 
-
+// Constructor for an image job. Will randomly pick a population, then
+// randomly select an image. The images are convieniently named 'image-'
 var imageJob = function() {
-	this.imagePath = "../raw/";				// Path to images
-	this.numClasses = 6;							// Repeated, probably need to address this
-	// 1/3 a prior chance of pulling a GY yellows
-	this.label = Math.floor( Math.random() * 3 );
-	switch (this.label) {
-		case 0:
-			this.imagePath = this.imagePath + "GY/"; break;
-		case 1:
-			this.imagePath = this.imagePath + "Other/"; break;
-		case 2:
-			this.imagePath = this.imagePath + "Healthy/"; break;
-	}
-	this.imagePath = this.imagePath + 'image-' + Math.ceil( Math.random() * 85 ) + '.jpg';
-	document.getElementById("imagePane").setAttribute("src",this.imagePath);
+	this.imagePath = IMAGE_PATH;     // Path to images
+	// 1/3 a prior chance of pulling a GY yellows. Otherwise it will be
+    // healthy control or other. Only use images that were actually 
+    // collected by Salento because otherwise it is easy to cheat because
+    // of the background.
+	/*** Select a random image ***/
+    this.validImage = false;
+    while (!this.validImage) {
+        this.label = Math.floor( Math.random() * 3 );
+	    switch (this.label) {
+	    	case 0:
+	    		this.imagePath = this.imagePath + "GY/"; break;
+	    	case 1:
+	    		this.imagePath = this.imagePath + "Other/"; break;
+	    	case 2:
+	    		this.imagePath = this.imagePath + "Healthy/"; break;
+    	}
+        // There are 85 images in the directory with the smallest amount
+        // of images
+	    this.imagePath = this.imagePath + 'image-' 
+            + Math.ceil( Math.random() * 85 ) + '.jpg';
+        // Make sure the image is valid
+        this.validImage = imageExists(this.path);
+    }
+
+	document.getElementById("imagePane").setAttribute("src",
+            this.imagePath);
 	document.getElementById("imagePane").setAttribute("width","450px");
 }
 
