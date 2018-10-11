@@ -11,6 +11,7 @@ window.onload = function() {
 	newExperimentButton.onclick = function() {
 		currentExperiment.resetExperiment();
 		currentExperiment.display();
+		setNewImage();
 		return false;
 	};
 	
